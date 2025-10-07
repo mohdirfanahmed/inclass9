@@ -683,4 +683,41 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
   // Function to create animated moving items with a glow effect
+  Widget _buildMovingItem({
+    required AnimationController controller,
+    required String imagePath,
+    required Color glowColor,
+    required bool isTrap,
+  }) {
+    return Positioned(
+      top: Random().nextDouble() * MediaQuery.of(context).size.height,
+      left: Random().nextDouble() * MediaQuery.of(context).size.width,
+      child: GestureDetector(
+        onTap: () => _handleClick(isTrap: isTrap),
+        child: AnimatedBuilder(
+          animation: controller,
+          builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(
+                50 * sin(controller.value * 2 * pi),  // Horizontal movement
+                50 * cos(controller.value * 2 * pi),  // Vertical movement
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: glowColor.withOpacity(0.8),
+                      blurRadius: 20,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+                child: Image.asset(imagePath, width: 100, height: 100),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }
